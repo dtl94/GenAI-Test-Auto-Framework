@@ -1,0 +1,8 @@
+{
+  "elements": [
+    "username input field",
+    "password input field",
+    "login button",
+    "error message"
+  ]
+}

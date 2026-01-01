@@ -1,0 +1,66 @@
+project:
+  base_url: "https://www.saucedemo.com/"
+
+credentials:
+  valid:
+    username: "standard_user"
+    password: "secret_sauce"
+  invalid:
+    username: "wrong_user"
+    password: "wrong_secret_sauce"
+
+pages:
+  login:
+    url: "https://www.saucedemo.com/"
+    elements_file: requirements/login_elements.json
+
+selectors:
+  output_dir: selectors
+  prompt: prompts/selectors_prompt.txt
+
+models:
+  preferred: auto
+
+  openai:
+    enabled: true
+    api_key: ${OPENAI_API_KEY}
+    base_url: "https://api.openai.com/v1"
+    model: "gpt-4o-mini"
+
+  deepseek:
+    enabled: true
+    api_key: ${DEEPSEEK_API_KEY}
+    base_url: "https://api.deepseek.com/v1"
+    model: "deepseek-chat"
+
+  gemini:
+    enabled: true
+    api_key: ${GEMINI_API_KEY}
+    base_url: "https://generativelanguage.googleapis.com"
+    model: "gemini-2.5-flash"
+    retry_count: 2
+    auto_pull: false
+
+  ollama:
+    enabled: false
+    base_url: "http://localhost:11434"
+    host: "localhost"
+    port: 11434
+    startup_timeout: 10
+    healthcheck_endpoint: "/api/tags"
+    auto_pull: false
+    retry_count: 2
+    model: "llama3.1"
+
+test_generation:
+  max_tokens: 2500
+  temperature: 0.2
+
+paths:
+  requirements_dir: "requirements"
+  prompts_dir: "prompts"
+  generated_web_tests_dir: "tests/web"
+  generated_api_tests_dir: "tests/api"
+  excel_output: "outputs"
+  selectors_dir: "selectors"
+  page_objects_dir: "page_objects"

@@ -1,0 +1,11 @@
+pytest
+playwright
+openai
+ollama
+requests
+pandas
+openpyxl
+pyyaml
+python-dotenv
+pytest-html
+allure-pytest

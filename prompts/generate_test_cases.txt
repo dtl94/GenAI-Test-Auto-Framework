@@ -1,0 +1,65 @@
+You are a senior QA automation engineer. Convert the following requirements into structured test cases in JSON format.
+
+STRICT RULES:
+- Output ONLY valid JSON
+- Do NOT add explanations, comments or text
+- Do NOT wrap in markdown
+- DO NOT wrap the JSON in ``` fences
+- Do NOT truncate
+- Ensure all strings are closed
+- Ensure JSON is parsable by Python json.loads()
+
+Return EXACTLY this structure:
+
+{
+    "test_cases": [
+        {
+            "test_id": "TC001",
+            "test_type": "web|mobile|network|security",
+            "description": "Test description",
+            "preconditions": ["precondition1", "precondition2"],
+            "steps": ["step1", "step2"],
+            "test_data": "optional data",
+            "expected_result": "Expected outcome",
+            "priority": "high|medium|low"
+        }
+    ],
+    "api_tests": [
+        {
+            "test_id": "TCAPI001",
+            "test_type": "api",
+            "description": "Test description",
+            "method": "GET|PUT|POST",
+            "url": "API URL",
+            "payload": "Request payload as valid JSON or string",
+            "expected_status": "Expected HTTP status",
+            "expected_response": "Expected response contains",
+            "priority": "high|medium|low"
+        }
+    ]
+}
+
+Convert these requirements into test cases:
+
+Requirements:
+{{requirements}}
+
+Notes:
+- Prefer short, concrete steps.
+- Include negative/edge cases.
+- Include meaningful sample values.
+You MUST return VALID JSON only.
+The JSON MUST contain:
+- "test_cases": array of web test cases
+- "api_tests": array of API test cases
+
+If no API tests exist, return an empty array.
+
+DO NOT return markdown.
+DO NOT add explanations.
+
+If you cannot finish, STOP before writing anything.
+Before responding, validate that your output can be parsed by Python json.loads().
+If you cannot generate JSON, return:
+{"error": "generation_failed"}
+
