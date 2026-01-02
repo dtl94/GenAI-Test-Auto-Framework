@@ -34,20 +34,70 @@ class TestGenerator:
         if not isinstance(step_text, str):
             raise TypeError(f"Step must be string, got {type(step_text)}")
 
+        step_text = step_text.strip()
+        
+        # Ignore garbage / JSON artifacts
+        if step_text in ("[", "]", "{", "}", ",", ""):
+            raise ValueError(f"Ignoring invalid step token: '{step_text}'")
+
         step_text = step_text.lower().strip()
 
         for step_def in step_definitions:
-            match = re.search(step_def["pattern"], step_text)
-            if match:
-                args = list(match.groups())
-                return {
-                    "page": step_def.get("page"),
-                    "action": step_def.get("action"),
-                    "assertion": step_def.get("assert"),
-                    "args": args
-                }
+
+            # ----------------------------
+            # FORMAT 1: (pattern, page, action, assertion)
+            # ----------------------------
+            if len(step_def) == 4:
+                pattern, page, action, assertion = step_def
+                match = re.search(pattern, step_text)
+                if match:
+                    return {
+                        "page": page,
+                        "action": action,
+                        "assertion": assertion,
+                        "args": list(match.groups()),
+                        "raw_code": None,
+                    }
+
+            # ----------------------------
+            # FORMAT 2: (pattern, raw_code)
+            # ----------------------------
+            elif len(step_def) == 2:
+                pattern, raw_code = step_def
+                match = re.search(pattern, step_text)
+                if match:
+                    return {
+                        "page": None,
+                        "action": None,
+                        "assertion": None,
+                        "args": [],
+                        "raw_code": raw_code,
+                    }
+
+            # ----------------------------
+            # FORMAT 3: (pattern, raw_code, assertion)
+            # ----------------------------
+            elif len(step_def) == 3:
+                pattern, raw_code, assertion = step_def
+                match = re.search(pattern, step_text)
+                if match:
+                    return {
+                        "page": None,
+                        "action": None,
+                        "assertion": assertion,
+                        "args": [],
+                        "raw_code": raw_code,
+                    }
+
+            else:
+                raise ValueError(
+                    f"Invalid step definition format: {step_def}. "
+                    "Expected (pattern, page, action, assertion) or (pattern, raw_code)"
+                )
 
         raise ValueError(f"No step definition found for: '{step_text}'")
+
+
 
 
     # ----------------------------------------------------------
@@ -56,6 +106,21 @@ class TestGenerator:
     def generate_playwright_test(self, test_case: dict) -> str:
         test_id = test_case["test_id"].lower()
         steps = test_case.get("steps", [])
+
+        # Normalize steps (LLM safety)
+        if isinstance(steps, str):
+            try:
+                steps = json.loads(steps)
+            except Exception:
+                raise ValueError(
+                    f"Invalid steps format for test {test_case.get('test_id')}: {steps}"
+                )
+
+        if not isinstance(steps, list):
+            raise ValueError(
+                f"'steps' must be a list for test {test_case.get('test_id')}"
+            )
+
 
         # Load config values
         base_url = self.config["project"]["base_url"]
@@ -73,6 +138,13 @@ class TestGenerator:
 
         for step in steps:
             resolved = self.resolve_step(step)
+
+            # Direct raw Playwright code
+            if resolved.get("raw_code"):
+                out.append(f"    {resolved['raw_code']}")
+                if resolved.get("assertion"):
+                    out.append(f"    {resolved['assertion']}")
+                continue
 
             # Instantiate page object if needed
             if resolved.page:

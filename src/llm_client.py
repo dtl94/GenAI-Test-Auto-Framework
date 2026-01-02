@@ -416,10 +416,14 @@ class LLMClient:
             #return self.generate_with_deepseek(system_message)
         #elif model_type == "gemini":
             #return self.generate_with_gemini(system_message)
-        if model_type in ("ollama", "gemini", "openai", "deepseek"):
-            return self.generate_with_fallback(prompt=system_message, preferred_provider=model_type,)
-        else:
-            raise ValueError(f"Unsupported model type: {model_type}")
+        return self.generate_with_fallback(
+            prompt=system_message,
+            preferred_provider=model_type,
+        )
+        
+    # ==================================================
+    # GENERATE WITH FALLBACK BETWEEN LLM CLIENTS
+    # ==================================================
 
     def generate_with_fallback(
         self,

@@ -13,6 +13,9 @@ pages:
   login:
     url: "https://www.saucedemo.com/"
     elements_file: requirements/login_elements.json
+  inventory:
+    url: "https://www.saucedemo.com/inventory.html"
+    elements_file: requirements/inventory_elements.json
 
 selectors:
   output_dir: selectors
