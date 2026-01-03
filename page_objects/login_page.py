@@ -4,9 +4,9 @@ class LoginPage:
     def __init__(self, page: Page):
         self.page = page
 
-        self._username_input_field = '[data-test="username"]'
-        self._password_input_field = '[data-test="password"]'
-        self._login_button = '[data-test="login-button"]'
+        self._username_input_field = 'data-test=username'
+        self._password_input_field = 'data-test=password'
+        self._login_button = 'data-test=login-button'
         self._error_message = 'div.error-message-container'
 
     def enter_username_input_field(self, value):

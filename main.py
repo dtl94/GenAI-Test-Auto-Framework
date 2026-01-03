@@ -214,5 +214,5 @@ if __name__ == "__main__":
 
     framework.run_full_pipeline(
         requirements_folder=requirements_folder,
-        model=None
+        model="openai"
     )

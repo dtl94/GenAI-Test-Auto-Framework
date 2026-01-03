@@ -29,7 +29,7 @@ def test_tcapi001():
             try:
                 data = response.json()
                 if "responseCode" in data:
-                    assert data["responseCode"] == 200, f"Expected responseCode 200, got {data['responseCode']}"
+                    assert data["responseCode"] == 200, products, id, name, price, brand, category, f"Expected responseCode 200, products, id, name, price, brand, category, got {data['responseCode']}"
             except ValueError:
                 # Response not JSON, skip
                 data = None

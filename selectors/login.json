@@ -1,6 +1,6 @@
 {
-  "username input field": "[data-test=\"username\"]",
-  "password input field": "[data-test=\"password\"]",
-  "login button": "[data-test=\"login-button\"]",
+  "username input field": "data-test=username",
+  "password input field": "data-test=password",
+  "login button": "data-test=login-button",
   "error message": "div.error-message-container"
 }
